@@ -1,0 +1,17 @@
+i### Java ###
+# Compiled class file
+*.class
+# Log file
+*.log
+
+### Maven ###
+target/
+pom.xml.releaseBackup
+
+### IntelliJ IDEA ###
+/out/
+.idea
+*.iws
+*.iml
+*.ipr
+
