@@ -2,7 +2,7 @@
 Demo of spring boot and spring kafka
 
 ## Running tests
-```mvn clean install``` 
+```mvn clean test``` 
 
 ## Running app
 ```docker-compose up```
