@@ -11,3 +11,7 @@ Demo of spring boot and spring kafka
 
 ## Send some events to processing
 ```curl -X POST http://localhost:8080/events -H 'content-type: application/json' -d '{"quantity": 2}'```
+
+## Send some logs to processing
+```curl -X POST http://localhost:8080/logs -H 'content-type: application/json' -d '{"quantity": 2}'```
+
