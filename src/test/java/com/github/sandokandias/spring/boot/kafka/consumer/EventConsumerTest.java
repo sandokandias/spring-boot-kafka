@@ -2,7 +2,10 @@ package com.github.sandokandias.spring.boot.kafka.consumer;
 
 import com.github.sandokandias.spring.boot.kafka.model.Event;
 import com.github.sandokandias.spring.boot.kafka.model.EventRepository;
+import com.github.sandokandias.spring.boot.kafka.model.Log;
+import com.github.sandokandias.spring.boot.kafka.model.LogRepository;
 import com.github.sandokandias.spring.boot.kafka.producer.EventProducer;
+import com.github.sandokandias.spring.boot.kafka.producer.LogProducer;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -38,19 +41,26 @@ public class EventConsumerTest {
     static final int BROKERS = 1;
     static final boolean CONTROLLED_SHUTDOWN = true;
     static final int PARTITIONS = 2;
-    static final String TOPIC = "events";
+    static final String TOPIC_EVENTS = "events";
+    static final String TOPIC_LOGS = "logs";
 
     @Autowired
     EventProducer eventProducer;
 
     @Autowired
+    LogProducer logProducer;
+
+    @Autowired
     EventRepository eventRepository;
+
+    @Autowired
+    LogRepository logRepository;
 
     @Autowired
     KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry;
 
     @ClassRule
-    public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(BROKERS, CONTROLLED_SHUTDOWN, PARTITIONS, TOPIC);
+    public static KafkaEmbedded embeddedKafka = new KafkaEmbedded(BROKERS, CONTROLLED_SHUTDOWN, PARTITIONS, TOPIC_EVENTS, TOPIC_LOGS);
 
     @Before
     public void setUp() throws Exception {
@@ -74,12 +84,16 @@ public class EventConsumerTest {
     }
 
     @Test
-    public void shouldConsumeEvent() throws InterruptedException {
+    public void shouldConsume() throws InterruptedException {
 
         IntStream.range(0, 2)
                 .forEach(index -> {
                     Event event = Event.of(index);
                     eventProducer.produce(event);
+
+                    Log log = Log.of(index);
+                    logProducer.produce(log);
+
                 });
 
         TimeUnit.SECONDS.sleep(5l);
@@ -88,6 +102,11 @@ public class EventConsumerTest {
         assertNotNull(events);
         assertFalse(events.isEmpty());
         assertEquals(2, events.size());
+
+        List<Log> logs = logRepository.findAll();
+        assertNotNull(logs);
+        assertFalse(logs.isEmpty());
+        assertEquals(2, logs.size());
     }
 
 

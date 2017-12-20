@@ -1,6 +1,6 @@
 package com.github.sandokandias.spring.boot.kafka.consumer;
 
-import com.github.sandokandias.spring.boot.kafka.handler.EventHandler;
+import com.github.sandokandias.spring.boot.kafka.handler.LogHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
@@ -10,18 +10,18 @@ import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-public class EventConsumer {
+public class LogConsumer {
 
-    final EventHandler eventHandler;
+    final LogHandler logHandler;
 
-    public EventConsumer(EventHandler eventHandler) {
-        this.eventHandler = eventHandler;
+    public LogConsumer(LogHandler logHandler) {
+        this.logHandler = logHandler;
     }
 
-    @KafkaListener(topics = "${kafka.topic.events}")
+    @KafkaListener(topics = "${kafka.topic.logs}")
     public void listen(@Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
                        @Payload String payload) {
-        log.info("Consuming event {}", payload);
-        eventHandler.handle(key, payload);
+        log.info("Consuming log {}", payload);
+        logHandler.handle(key, payload);
     }
 }

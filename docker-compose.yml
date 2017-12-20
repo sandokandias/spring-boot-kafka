@@ -12,7 +12,8 @@ services:
         - "9092:9092"
       environment:
         KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
-        KAFKA_CREATE_TOPICS: "events:2:1"
+        KAFKA_CREATE_TOPICS: "events:2:1,\
+                              logs:2:1"
 
         KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       volumes:

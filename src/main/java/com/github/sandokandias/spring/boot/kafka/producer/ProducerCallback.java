@@ -11,18 +11,18 @@ public class ProducerCallback implements ListenableFutureCallback<SendResult<Str
 
     @Override
     public void onFailure(Throwable throwable) {
-        log.error("Error publishing event.",
+        log.error("Error publishing msg.",
                 throwable);
     }
 
     @Override
     public void onSuccess(SendResult<String, String> result) {
         String key = result.getProducerRecord().key();
-        String event = result.getProducerRecord().value();
+        String msg = result.getProducerRecord().value();
         String topic = result.getRecordMetadata().topic();
-        log.info("[key: {}, event: {}] successfully published in the topic [{}].",
+        log.info("[key: {}, msg: {}] successfully published in the topic [{}].",
                 key,
-                event,
+                msg,
                 topic);
     }
 }

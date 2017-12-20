@@ -1,8 +1,8 @@
 package com.github.sandokandias.spring.boot.kafka.controller;
 
 
-import com.github.sandokandias.spring.boot.kafka.model.Event;
-import com.github.sandokandias.spring.boot.kafka.producer.EventProducer;
+import com.github.sandokandias.spring.boot.kafka.model.Log;
+import com.github.sandokandias.spring.boot.kafka.producer.LogProducer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,22 +14,23 @@ import javax.validation.Valid;
 import java.util.stream.IntStream;
 
 @RestController
-public class EventController {
+public class LogController {
 
-    final EventProducer eventProducer;
+    final LogProducer logProducer;
 
-    public EventController(EventProducer eventProducer) {
-        this.eventProducer = eventProducer;
+    public LogController(LogProducer logProducer) {
+        this.logProducer = logProducer;
     }
 
+
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/events", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public void createEvents(@Valid @RequestBody CreateEventRequest request) {
+    @PostMapping(value = "/logs", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public void createLogs(@Valid @RequestBody CreateLogRequest request) {
 
         IntStream.range(0, request.getQuantity())
                 .forEach(index -> {
-                    Event event = Event.of(index);
-                    eventProducer.produce(event);
+                    Log log = Log.of(index);
+                    logProducer.produce(log);
                 });
     }
 }
